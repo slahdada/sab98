@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saber Auto - Voitures Presque Neuves | Import Golfe | Spécialiste Pick-up Tunisie</title>
+  <meta name="description" content="Saber Auto - Votre spécialiste en voitures presque neuves et import depuis le Golfe à Tunis. Spécialiste pick-up Isuzu D-Max, Toyota Hilux. Import sur demande. Route X, Av. Mohamed Bouazizi, Bardo, Tunis.">
+  <meta name="keywords" content="Saber Auto, voiture Tunisie, occasion Tunisie, Isuzu D-Max, Toyota Hilux, pick-up Tunisie, import Golfe, voiture presque neuve, Bardo Tunis">
+  <meta property="og:title" content="Saber Auto - Voitures Presque Neuves & Import Golfe">
+  <meta property="og:description" content="Spécialiste pick-up et import voitures depuis le Golfe à Tunis, Tunisie.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body lang="fr">
+
+  <!-- ========================================================
+       CAR AD INTRO OVERLAY
+       ======================================================== -->
+  <div id="carAdOverlay" class="car-ad-overlay">
+    <!-- Cinematic bars top/bottom -->
+    <div class="ad-cinema-bar ad-cinema-top"></div>
+    <div class="ad-cinema-bar ad-cinema-bottom"></div>
+
+    <!-- Background scene -->
+    <div class="ad-bg-scene">
+      <img src="images/ad_car.png" alt="Saber Auto - Voitures Premium" class="ad-bg-img" id="adBgImg">
+      <!-- Night road canvas for extra depth -->
+      <canvas id="adRoadCanvas" class="ad-road-canvas"></canvas>
+    </div>
+
+    <!-- Dark overlay gradient -->
+    <div class="ad-overlay-gradient"></div>
+
+    <!-- Car, road and particles removed — only background + sound kept -->
+
+    <!-- Branding content -->
+    <div class="ad-content">
+      <div class="ad-logo-wrap">
+        <img src="images/logo.png" alt="Saber Auto Logo" class="ad-logo-img"
+             onerror="this.style.display='none'">
+        <div class="ad-brand-name">SABER AUTO</div>
+      </div>
+      <div class="ad-tagline" id="adTagline">
+        <span class="ad-tag-word">Voitures</span>
+        <span class="ad-tag-word ad-tag-highlight">Presque Neuves</span>
+        <span class="ad-tag-word">&amp; Import</span>
+        <span class="ad-tag-word ad-tag-gold">du Golfe</span>
+      </div>
+      <div class="ad-sub" id="adSub">
+        🏆 Spécialiste Pick-up · Tunis, Tunisie
+      </div>
+
+      <!-- Sound indicator -->
+      <div class="ad-sound-indicator" id="adSoundIndicator">
+        <i class="fas fa-volume-up"></i>
+        <span>Son du moteur</span>
+      </div>
+
+      <!-- Skip button -->
+      <button class="ad-skip-btn" id="adSkipBtn" onclick="closeCarAd()">
+        <span id="adSkipLabel">Passer la publicité</span>
+        <svg viewBox="0 0 24 24" fill="none"><polygon points="5,4 19,12 5,20" fill="currentColor"/><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div class="ad-skip-progress" id="adSkipProgress"></div>
+      </button>
+    </div>
+
+    <!-- Countdown timer ring -->
+    <div class="ad-timer-ring" id="adTimerRing">
+      <svg viewBox="0 0 44 44">
+        <circle class="ad-timer-bg" cx="22" cy="22" r="19"/>
+        <circle class="ad-timer-arc" id="adTimerArc" cx="22" cy="22" r="19"/>
+      </svg>
+      <span class="ad-timer-count" id="adTimerCount">6</span>
+    </div>
+
+    <!-- Mute button -->
+    <button class="ad-mute-btn" id="adMuteBtn" onclick="toggleAdSound()" title="Couper/activer le son">
+      <i class="fas fa-volume-up" id="adMuteIcon"></i>
+    </button>
+  </div>
+
+  <!-- ========================================================
+       HEADER
+       ======================================================== -->
+  <header id="header">
+    <nav class="navbar container">
+      <!-- Logo -->
+      <a href="#hero" class="logo" id="logo-link">
+        <img src="images/logo.png" alt="Saber Auto Logo"
+             onerror="this.style.display='none'; document.getElementById('logo-icon').style.display='flex'">
+        <div id="logo-icon" style="display:none; width:48px;height:48px; background:linear-gradient(135deg,#e63946,#c1121f); border-radius:10px; align-items:center; justify-content:center; color:#fff; font-size:1.4rem; font-weight:900;">S</div>
+        <div class="logo-text">
+          <span class="logo-name">SABER AUTO</span>
+          <span class="logo-tagline" data-i18n="hero_badge_short">Spécialiste Pick-up · Import Golfe</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <ul class="nav-links" id="desktopNav">
+        <li><a href="#hero" class="nav-link active" data-i18n="nav_home">Accueil</a></li>
+        <li><a href="#vehicles" class="nav-link" data-i18n="nav_vehicles">Véhicules</a></li>
+        <li><a href="#why-us" class="nav-link" data-i18n="nav_whyus">Pourquoi Nous</a></li>
+        <li><a href="#import" class="nav-link" data-i18n="nav_import">Import</a></li>
+        <li><a href="#about" class="nav-link" data-i18n="nav_about">À Propos</a></li>
+        <li><a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+
+      <!-- Controls -->
+      <div class="nav-controls">
+        <!-- Language Selector -->
+        <div class="lang-selector" id="langSelector">
+          <button class="lang-btn" id="langBtn" aria-label="Language selector">
+            🌐 <span class="lang-current">FR</span> <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <div class="lang-option active" data-lang="fr" onclick="setLanguage('fr'); closeLangDropdown()">
+              <span class="flag">🇫🇷</span> Français
+            </div>
+            <div class="lang-option" data-lang="ar" onclick="setLanguage('ar'); closeLangDropdown()">
+              <span class="flag">🇹🇳</span> العربية
+            </div>
+            <div class="lang-option" data-lang="en" onclick="setLanguage('en'); closeLangDropdown()">
+              <span class="flag">🇬🇧</span> English
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+
+        <!-- Hamburger -->
+        <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Nav -->
+  <nav class="mobile-nav" id="mobileNav" role="navigation">
+    <a href="#hero" class="nav-link" data-i18n="nav_home">Accueil</a>
+    <a href="#vehicles" class="nav-link" data-i18n="nav_vehicles">Véhicules</a>
+    <a href="#why-us" class="nav-link" data-i18n="nav_whyus">Pourquoi Nous</a>
+    <a href="#import" class="nav-link" data-i18n="nav_import">Import</a>
+    <a href="#about" class="nav-link" data-i18n="nav_about">À Propos</a>
+    <a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a>
+    <div style="margin-top:1rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+      <div class="lang-option active" data-lang="fr" onclick="setLanguage('fr'); closeNav()" style="border:1.5px solid var(--border-color); border-radius:8px; padding:0.5rem 1rem;">🇫🇷 Français</div>
+      <div class="lang-option" data-lang="ar" onclick="setLanguage('ar'); closeNav()" style="border:1.5px solid var(--border-color); border-radius:8px; padding:0.5rem 1rem;">🇹🇳 العربية</div>
+      <div class="lang-option" data-lang="en" onclick="setLanguage('en'); closeNav()" style="border:1.5px solid var(--border-color); border-radius:8px; padding:0.5rem 1rem;">🇬🇧 English</div>
+    </div>
+    <a href="https://wa.me/21698286333" target="_blank" class="btn btn-whatsapp" style="margin-top:1rem;">
+      <i class="fab fa-whatsapp"></i> WhatsApp: +216 98 286 333
+    </a>
+  </nav>
+  <div id="navOverlay"></div>
+
+  <!-- ========================================================
+       HERO SECTION
+       ======================================================== -->
+  <section id="hero">
+    <div class="hero-bg">
+      <img src="images/hero_banner.png" alt="Saber Auto - Voitures presque neuves et import Golfe">
+    </div>
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge" data-i18n="hero_badge">🏆 N°1 Spécialiste Pick-up en Tunisie</div>
+
+        <h1 class="hero-title">
+          <span data-i18n="hero_title_1">Voitures Presque </span>
+          <span class="highlight" data-i18n="hero_title_2">Neuves</span><br>
+          <span data-i18n="hero_title_3">Import du Golfe </span>
+          <span class="highlight-gold" data-i18n="hero_title_4">sur Demande</span>
+        </h1>
+
+        <p class="hero-desc" data-i18n="hero_desc">
+          Saber Auto vous propose une sélection premium de voitures presque neuves, des occasions soigneusement choisies, et l'importation sur commande depuis les pays du Golfe. Spécialiste pick-up Isuzu, Toyota & D-Max.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#vehicles" class="btn btn-primary" id="btn-hero-offers">
+            <i class="fas fa-car"></i>
+            <span data-i18n="btn_offers">Voir les Offres</span>
+          </a>
+          <a href="#import" class="btn btn-secondary" id="btn-hero-quote">
+            <i class="fas fa-file-alt"></i>
+            <span data-i18n="btn_quote">Demander un Devis</span>
+          </a>
+          <a href="https://wa.me/21698286333" target="_blank" class="btn btn-whatsapp" id="btn-hero-wp">
+            <i class="fab fa-whatsapp"></i>
+            <span data-i18n="btn_whatsapp">WhatsApp</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-number">50<span>+</span></div>
+            <div class="hero-stat-label" data-i18n="stat_1_label">Véhicules Disponibles</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-number">500<span>+</span></div>
+            <div class="hero-stat-label" data-i18n="stat_2_label">Clients Satisfaits</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-number">10<span>+</span></div>
+            <div class="hero-stat-label" data-i18n="stat_3_label">Années d'Expérience</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-number">200<span>+</span></div>
+            <div class="hero-stat-label" data-i18n="stat_4_label">Importés du Golfe</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       CAR SLIDER
+       ======================================================== -->
+  <div class="car-slider-section">
+    <div class="slider-track-wrapper">
+      <div class="slider-track" id="sliderTrack"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       VEHICLES SECTION
+       ======================================================== -->
+  <section id="vehicles" class="section-padding">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag" data-i18n="vehicles_tag">Notre Stock</span>
+        <h2 class="section-title">
+          <span data-i18n="vehicles_title">Nos </span>
+          <span data-i18n="vehicles_title_span">Véhicules</span>
+        </h2>
+        <p class="section-desc" data-i18n="vehicles_desc">
+          Découvrez notre sélection de voitures presque neuves, soigneusement inspectées et prêtes à la route.
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="vehicles-filters">
+        <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Tous</button>
+        <button class="filter-btn" data-filter="pickup" data-i18n="filter_pickup">
+          <i class="fas fa-truck-pickup"></i> Pick-up
+        </button>
+        <button class="filter-btn" data-filter="suv" data-i18n="filter_suv">SUV</button>
+        <button class="filter-btn" data-filter="sedan" data-i18n="filter_sedan">Berline</button>
+        <button class="filter-btn" data-filter="import" data-i18n="filter_import">Import Golfe</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="vehicles-grid" id="vehiclesGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ========================================================
+       WHY US SECTION
+       ======================================================== -->
+  <section id="why-us" class="section-padding">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag" data-i18n="why_tag">Nos Avantages</span>
+        <h2 class="section-title">
+          <span data-i18n="why_title">Pourquoi choisir </span>
+          <span data-i18n="why_title_span">Saber Auto ?</span>
+        </h2>
+        <p class="section-desc" data-i18n="why_desc">
+          Des années d'expérience dans l'importation et la vente de véhicules de qualité en Tunisie.
+        </p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card animate-on-scroll animate-delay-100">
+          <div class="why-icon"><i class="fas fa-star"></i></div>
+          <h3 class="why-title" data-i18n="why_1_title">Voitures Presque Neuves</h3>
+          <p class="why-desc" data-i18n="why_1_desc">Véhicules soigneusement sélectionnés, vérifiés et en excellent état. Kilométrage faible et entretien garanti.</p>
+        </div>
+        <div class="why-card animate-on-scroll animate-delay-200">
+          <div class="why-icon"><i class="fas fa-globe-asia"></i></div>
+          <h3 class="why-title" data-i18n="why_2_title">Import depuis le Golfe</h3>
+          <p class="why-desc" data-i18n="why_2_desc">Nous importons directement depuis les pays du Golfe. Voitures de qualité supérieure à prix compétitifs.</p>
+        </div>
+        <div class="why-card animate-on-scroll animate-delay-300">
+          <div class="why-icon"><i class="fas fa-truck-pickup"></i></div>
+          <h3 class="why-title" data-i18n="why_3_title">Spécialiste Pick-up</h3>
+          <p class="why-desc" data-i18n="why_3_desc">Expert en pick-up Isuzu D-Max, Toyota Hilux et toutes les grandes marques. Stock disponible et import sur commande.</p>
+        </div>
+        <div class="why-card animate-on-scroll animate-delay-100">
+          <div class="why-icon"><i class="fas fa-handshake"></i></div>
+          <h3 class="why-title" data-i18n="why_4_title">Accompagnement Personnalisé</h3>
+          <p class="why-desc" data-i18n="why_4_desc">De la sélection à la livraison, notre équipe vous accompagne à chaque étape pour une expérience sans stress.</p>
+        </div>
+        <div class="why-card animate-on-scroll animate-delay-200">
+          <div class="why-icon"><i class="fas fa-ship"></i></div>
+          <h3 class="why-title" data-i18n="why_5_title">Import sur Demande</h3>
+          <p class="why-desc" data-i18n="why_5_desc">Vous avez un modèle en tête ? Nous l'importons pour vous depuis le Golfe ou d'autres pays. Prix négociable.</p>
+        </div>
+        <div class="why-card animate-on-scroll animate-delay-300">
+          <div class="why-icon"><i class="fas fa-headset"></i></div>
+          <h3 class="why-title" data-i18n="why_6_title">Service Client 24/7</h3>
+          <p class="why-desc" data-i18n="why_6_desc">Disponible via WhatsApp, téléphone et email. Réponse rapide à toutes vos questions et demandes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ========================================================
+       IMPORT SECTION
+       ======================================================== -->
+  <section id="import" class="section-padding">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag" data-i18n="import_tag">Import sur Commande</span>
+        <h2 class="section-title">
+          <span data-i18n="import_title">Import Voitures </span>
+          <span data-i18n="import_title_span">depuis le Golfe</span>
+        </h2>
+        <p class="section-desc" data-i18n="import_desc">
+          Un service d'importation clé en main depuis les pays du Golfe. Choisissez votre voiture, nous la ramenons pour vous.
+        </p>
+      </div>
+
+      <div class="import-grid">
+        <!-- Image -->
+        <div class="animate-on-scroll animate-delay-100">
+          <div class="import-img-wrapper">
+            <img src="images/gulf_import.png" alt="Import voitures depuis le Golfe" loading="lazy">
+            <div class="import-overlay">
+              <span class="import-badge" data-i18n="import_badge">🌍 Import depuis Dubai, Qatar, Arabie Saoudite</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="animate-on-scroll animate-delay-200">
+          <div class="import-features">
+            <div class="import-feature">
+              <div class="import-feature-icon"><i class="fas fa-search"></i></div>
+              <div class="import-feature-text">
+                <h4 data-i18n="import_f1_title">Choix du Véhicule</h4>
+                <p data-i18n="import_f1_desc">Dites-nous le modèle, l'année, la couleur. Nous gérons tout depuis le Golfe.</p>
+              </div>
+            </div>
+            <div class="import-feature">
+              <div class="import-feature-icon"><i class="fas fa-file-contract"></i></div>
+              <div class="import-feature-text">
+                <h4 data-i18n="import_f2_title">Procédures Officielles</h4>
+                <p data-i18n="import_f2_desc">Dédouanement, immatriculation et contrôle technique pris en charge.</p>
+              </div>
+            </div>
+            <div class="import-feature">
+              <div class="import-feature-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="import-feature-text">
+                <h4 data-i18n="import_f3_title">Livraison à Tunis</h4>
+                <p data-i18n="import_f3_desc">Réception dans notre showroom Route X, Avenue Mohamed Bouazizi, Bardo.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Import Form -->
+          <div class="form-card">
+            <h3 data-i18n="form_import_title">Demande d'Import</h3>
+            <p data-i18n="form_import_desc">Remplissez ce formulaire et nous vous contactons sous 24h.</p>
+            <form data-form="import" id="importForm" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_name">Nom complet</label>
+                  <input type="text" class="form-control" id="import-name" data-i18n="form_name" placeholder="Nom complet" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_phone">Téléphone</label>
+                  <input type="tel" class="form-control" id="import-phone" placeholder="+216 XX XXX XXX" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_car_type">Type de voiture</label>
+                  <select class="form-control" id="import-car-type" required>
+                    <option value="" disabled selected data-i18n="form_car_type">Type de voiture</option>
+                    <option data-i18n="car_type_pickup">Pick-up (Isuzu, Toyota, D-Max...)</option>
+                    <option data-i18n="car_type_suv">SUV / Crossover</option>
+                    <option data-i18n="car_type_sedan">Berline / Citadine</option>
+                    <option data-i18n="car_type_other">Autre type</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_budget">Budget estimé</label>
+                  <input type="text" class="form-control" id="import-budget" placeholder="Ex: 30,000 TND" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="form_message">Message / Détails</label>
+                <textarea class="form-control" id="import-message" data-i18n="form_message" placeholder="Message / Détails" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" data-i18n-key="form_submit">
+                <i class="fas fa-paper-plane"></i>
+                <span data-i18n="form_submit">Envoyer la Demande</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ========================================================
+       ABOUT SECTION
+       ======================================================== -->
+  <section id="about" class="section-padding">
+    <div class="container">
+      <div class="about-grid">
+        <!-- Image -->
+        <div class="about-img-wrapper animate-on-scroll animate-delay-100">
+          <img class="about-profile-img"
+               src="images/profile.jpg"
+               alt="Directeur Saber Auto"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22380%22 height=%22450%22%3E%3Crect fill=%22%23e2e8f0%22 width=%22380%22 height=%22450%22 rx=%2224%22/%3E%3Ccircle cx=%22190%22 cy=%22160%22 r=%2270%22 fill=%22%23a0aec0%22/%3E%3Cellipse cx=%22190%22 cy=%22370%22 rx=%22120%22 ry=%2280%22 fill=%22%23a0aec0%22/%3E%3C/svg%3E'">
+          <div class="about-badge-float">
+            <div class="number">10+</div>
+            <div class="label" data-i18n="about_years">Ans d'Expérience</div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="about-content animate-on-scroll animate-delay-200">
+          <span class="section-tag" data-i18n="about_tag">Notre Histoire</span>
+          <h2>
+            <span data-i18n="about_title">À Propos de </span>
+            <span style="background:var(--gradient-accent);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="about_title_span">Saber Auto</span>
+          </h2>
+          <p data-i18n="about_p1">Saber Auto est votre spécialiste automobile de confiance en Tunisie, situé au cœur de Bardo, Tunis. Depuis plusieurs années, nous nous sommes forgés une réputation d'excellence dans l'importation et la vente de véhicules presque neufs.</p>
+          <p data-i18n="about_p2">Notre expertise principale réside dans les pick-up de grandes marques : Isuzu D-Max, Toyota Hilux et bien d'autres. Nous importons directement depuis les pays du Golfe, garantissant des véhicules en parfait état à des prix compétitifs.</p>
+          <p data-i18n="about_p3">Chaque véhicule est soigneusement inspecté avant mise en vente. Notre service d'import sur demande vous permet de commander n'importe quel modèle depuis le Golfe.</p>
+
+          <div class="about-highlights">
+            <div class="highlight-item"><i class="fas fa-check-circle"></i> <span data-i18n="about_h1">Isuzu & Toyota Expert</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i> <span data-i18n="about_h2">Import Certifié Golfe</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i> <span data-i18n="about_h3">Service de Qualité</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i> <span data-i18n="about_h4">Tunis, Bardo</span></div>
+          </div>
+
+          <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
+            <a href="#contact" class="btn btn-primary">
+              <i class="fas fa-envelope"></i> <span data-i18n="nav_contact">Contact</span>
+            </a>
+            <a href="https://wa.me/21698286333" target="_blank" class="btn btn-whatsapp">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ========================================================
+       CONTACT SECTION
+       ======================================================== -->
+  <section id="contact" class="section-padding">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-tag" data-i18n="contact_tag">Contactez-Nous</span>
+        <h2 class="section-title">
+          <span data-i18n="contact_title">Nous Sommes </span>
+          <span data-i18n="contact_title_span">À Votre Service</span>
+        </h2>
+        <p class="section-desc" data-i18n="contact_desc">
+          N'hésitez pas à nous contacter pour toute information sur nos véhicules ou notre service d'import.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Info -->
+        <div class="animate-on-scroll animate-delay-100">
+          <h3 data-i18n="contact_info_title">Informations de Contact</h3>
+          <p data-i18n="contact_info_desc">Retrouvez-nous sur place ou contactez-nous directement.</p>
+
+          <div class="contact-items" style="margin-top:1.5rem;">
+            <div class="contact-item">
+              <div class="contact-icon red"><i class="fas fa-envelope"></i></div>
+              <div>
+                <div class="contact-item-label" data-i18n="contact_email">Email</div>
+                <div class="contact-item-value"><a href="mailto:sabksour@gmail.com">sabksour@gmail.com</a></div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon blue"><i class="fas fa-phone-alt"></i></div>
+              <div>
+                <div class="contact-item-label" data-i18n="contact_phone">Téléphone</div>
+                <div class="contact-item-value"><a href="tel:+21698286333">+216 98 286 333</a></div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon green"><i class="fab fa-whatsapp"></i></div>
+              <div>
+                <div class="contact-item-label" data-i18n="contact_whatsapp">WhatsApp</div>
+                <div class="contact-item-value">
+                  <a href="https://wa.me/21698286333" target="_blank">+216 98 286 333</a>
+                </div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon orange"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <div class="contact-item-label" data-i18n="contact_address">Adresse</div>
+                <div class="contact-item-value" data-i18n="contact_address_val">Route X, Av. Mohamed Bouazizi, près du Stade Bardo, Tunis, Tunisie</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="map-placeholder" style="margin-top:1.5rem; height:220px;">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.5!2d10.1354!3d36.8135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd4912e0d0d24d%3A0x0!2sStade+El+Menzah%2C+Tunis!5e0!3m2!1sfr!2stn!4v1700000000000"
+              allowfullscreen loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Saber Auto Location - Bardo, Tunis"
+              style="border-radius:12px; width:100%; height:100%; border:none;">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="animate-on-scroll animate-delay-200">
+          <div class="form-card">
+            <h3 data-i18n="form_contact_title">Envoyez-nous un Message</h3>
+            <p style="margin-bottom:1.5rem; font-size:0.9rem; color:var(--text-secondary);" data-i18n="contact_desc">N'hésitez pas à nous contacter pour toute information.</p>
+            <form data-form="contact" id="contactForm" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_name">Nom complet</label>
+                  <input type="text" class="form-control" id="contact-name" placeholder="Votre Nom" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" data-i18n="form_phone">Téléphone</label>
+                  <input type="tel" class="form-control" id="contact-phone" placeholder="+216 XX XXX XXX">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="form_email">Email</label>
+                <input type="email" class="form-control" id="contact-email" placeholder="votre@email.com" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="form_subject">Sujet</label>
+                <input type="text" class="form-control" id="contact-subject" placeholder="Objet de votre message">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="form_msg">Message</label>
+                <textarea class="form-control" id="contact-message" rows="5" placeholder="Votre message..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" data-i18n-key="form_send">
+                <i class="fas fa-paper-plane"></i>
+                <span data-i18n="form_send">Envoyer le Message</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FOOTER
+       ======================================================== -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div class="footer-brand">
+          <div class="logo">
+            <img src="images/logo.png" alt="Saber Auto" style="height:44px;width:44px;object-fit:contain;border-radius:10px;"
+                 onerror="this.style.display='none'">
+            <div class="logo-text">
+              <span class="logo-name">SABER AUTO</span>
+            </div>
+          </div>
+          <p class="footer-desc" data-i18n="footer_desc">Spécialiste voitures presque neuves et pick-up importés du Golfe. Votre partenaire automobile de confiance à Tunis.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/21698286333" target="_blank" class="social-btn" title="WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:sabksour@gmail.com" class="social-btn" title="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+            <a href="tel:+21698286333" class="social-btn" title="Téléphone">
+              <i class="fas fa-phone-alt"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="footer-col">
+          <h4 data-i18n="footer_links">Liens Rapides</h4>
+          <div class="footer-links">
+            <a href="#hero" data-i18n="nav_home">Accueil</a>
+            <a href="#vehicles" data-i18n="nav_vehicles">Véhicules</a>
+            <a href="#why-us" data-i18n="nav_whyus">Pourquoi Nous</a>
+            <a href="#import" data-i18n="nav_import">Import</a>
+            <a href="#about" data-i18n="nav_about">À Propos</a>
+            <a href="#contact" data-i18n="nav_contact">Contact</a>
+          </div>
+        </div>
+
+        <!-- Contact Quick -->
+        <div class="footer-col">
+          <h4 data-i18n="footer_contact">Contact Rapide</h4>
+          <div class="footer-contact-list">
+            <div class="footer-contact-item">
+              <i class="fas fa-envelope"></i>
+              <a href="mailto:sabksour@gmail.com">sabksour@gmail.com</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-phone-alt"></i>
+              <a href="tel:+21698286333">+216 98 286 333</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fab fa-whatsapp"></i>
+              <a href="https://wa.me/21698286333" target="_blank">+216 98 286 333</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span data-i18n="contact_address_val">Route X, Av. M. Bouazizi, Bardo, Tunis</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hours -->
+        <div class="footer-col">
+          <h4 data-i18n="footer_hours">Heures d'Ouverture</h4>
+          <div class="footer-contact-list">
+            <div class="footer-contact-item">
+              <i class="fas fa-clock"></i>
+              <span data-i18n="hours_weekdays">Lun - Sam : 8h00 - 19h00</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span data-i18n="hours_sunday">Dimanche : Sur RDV</span>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a href="https://wa.me/21698286333" target="_blank" class="btn btn-whatsapp" style="font-size:0.85rem; padding:0.65rem 1.2rem;">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="footer-bottom">
+        <p>&copy; 2024 <span>SABER AUTO</span>. <span data-i18n="footer_rights">Tous droits réservés.</span></p>
+        <p data-i18n="footer_made">Fait avec ❤️ en Tunisie</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       FLOATING ELEMENTS
+       ======================================================== -->
+  <!-- WhatsApp Float -->
+  <div class="whatsapp-float" id="waFloat">
+    <a href="https://wa.me/21698286333" target="_blank" title="Chat WhatsApp" rel="noopener">
+      <i class="fab fa-whatsapp"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Scroll Top -->
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()" aria-label="Retour en haut">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========================================================
+       SCRIPTS
+       ======================================================== -->
+  <script src="js/main.js"></script>
+  <script>
+    // Lang dropdown toggle
+    function closeLangDropdown() {
+      document.getElementById('langSelector').classList.remove('open');
+    }
+    document.getElementById('langBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('langSelector').classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#langSelector')) {
+        document.getElementById('langSelector').classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>
